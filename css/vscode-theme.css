@@ -1,0 +1,245 @@
+/* ==========================================================================
+   VS CODE THEME DESIGN SYSTEM & TOKENS
+   Default: Dark+ (VS Code Official) with support for Tokyo Night, Dracula, etc.
+   ========================================================================== */
+
+:root {
+  /* Fonts */
+  --font-ui: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-code: "JetBrains Mono", "Fira Code", Consolas, Menlo, Monaco, "Courier New", monospace;
+
+  /* VS Code Dark+ Default Theme Colors */
+  --vscode-titlebar-bg: #323233;
+  --vscode-titlebar-fg: #cccccc;
+  --vscode-activitybar-bg: #333333;
+  --vscode-activitybar-fg: #858585;
+  --vscode-activitybar-active: #ffffff;
+  --vscode-activitybar-badge-bg: #007acc;
+  --vscode-activitybar-badge-fg: #ffffff;
+
+  --vscode-sidebar-bg: #252526;
+  --vscode-sidebar-fg: #bbbbbb;
+  --vscode-sidebar-header-fg: #bbbbbb;
+  --vscode-sidebar-hover: #2a2d2e;
+  --vscode-sidebar-selected: #37373d;
+  --vscode-sidebar-border: #1e1e1e;
+
+  --vscode-tabs-bg: #252526;
+  --vscode-tab-bg: #2d2d2d;
+  --vscode-tab-active-bg: #1e1e1e;
+  --vscode-tab-fg: #969696;
+  --vscode-tab-active-fg: #ffffff;
+  --vscode-tab-border: #1e1e1e;
+  --vscode-tab-active-border-top: #007acc;
+
+  --vscode-breadcrumbs-bg: #1e1e1e;
+  --vscode-breadcrumbs-fg: #a9a9a9;
+
+  --vscode-editor-bg: #1e1e1e;
+  --vscode-editor-fg: #d4d4d4;
+  --vscode-linenumber-fg: #858585;
+  --vscode-linenumber-active-fg: #c6c6c6;
+  --vscode-cursor: #aeafad;
+  --vscode-selection: #264f78;
+  --vscode-active-line-bg: #282828;
+
+  --vscode-panel-bg: #1e1e1e;
+  --vscode-panel-border: #80808050;
+  --vscode-panel-tab-fg: #969696;
+  --vscode-panel-tab-active-fg: #e7e7e7;
+  --vscode-panel-tab-active-border: #007acc;
+
+  --vscode-terminal-bg: #181818;
+  --vscode-terminal-fg: #cccccc;
+  --vscode-terminal-prompt: #58a6ff;
+  --vscode-terminal-branch: #7ee787;
+  --vscode-terminal-dir: #d2a8ff;
+  --vscode-terminal-success: #3fb950;
+  --vscode-terminal-error: #f85149;
+  --vscode-terminal-warning: #d29922;
+
+  --vscode-statusbar-bg: #007acc;
+  --vscode-statusbar-fg: #ffffff;
+  --vscode-statusbar-hover: #1f8ad2;
+
+  --vscode-minimap-bg: #1e1e1e;
+  --vscode-minimap-slider: rgba(255, 255, 255, 0.08);
+  --vscode-minimap-slider-hover: rgba(255, 255, 255, 0.15);
+
+  --vscode-badge-bg: #2d3139;
+  --vscode-badge-border: #3d444d;
+  --vscode-badge-fg: #58a6ff;
+
+  /* Syntax Highlighting */
+  --syn-comment: #6a9955;
+  --syn-keyword: #569cd6;
+  --syn-control: #c586c0;
+  --syn-string: #ce9178;
+  --syn-number: #b5cea8;
+  --syn-function: #dcdcaa;
+  --syn-variable: #9cdcfe;
+  --syn-property: #9cdcfe;
+  --syn-type: #4ec9b0;
+  --syn-tag: #569cd6;
+  --syn-attribute: #92caf4;
+  --syn-operator: #d4d4d4;
+  --syn-punctuation: #d4d4d4;
+  --syn-heading: #4fc1ff;
+  --syn-bold: #e5c07b;
+  --syn-link: #3794ff;
+
+  /* UI Shadows & Radius */
+  --shadow-popup: 0 8px 24px rgba(0, 0, 0, 0.45);
+  --shadow-modal: 0 16px 36px rgba(0, 0, 0, 0.65);
+  --border-subtle: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+/* Tokyo Night Theme */
+[data-theme="tokyo-night"] {
+  --vscode-titlebar-bg: #1a1b26;
+  --vscode-activitybar-bg: #16161e;
+  --vscode-sidebar-bg: #16161e;
+  --vscode-tabs-bg: #16161e;
+  --vscode-tab-bg: #1f2335;
+  --vscode-tab-active-bg: #1a1b26;
+  --vscode-tab-active-border-top: #7aa2f7;
+  --vscode-editor-bg: #1a1b26;
+  --vscode-panel-bg: #16161e;
+  --vscode-terminal-bg: #13141c;
+  --vscode-statusbar-bg: #7aa2f7;
+  --vscode-statusbar-fg: #15161e;
+  --vscode-statusbar-hover: #89b4fa;
+  --syn-comment: #565f89;
+  --syn-keyword: #bb9af7;
+  --syn-function: #7aa2f7;
+  --syn-string: #9ece6a;
+  --syn-variable: #c0caf5;
+  --syn-type: #2ac3de;
+}
+
+/* Dracula Theme */
+[data-theme="dracula"] {
+  --vscode-titlebar-bg: #21222c;
+  --vscode-activitybar-bg: #1e1f29;
+  --vscode-sidebar-bg: #21222c;
+  --vscode-tabs-bg: #191a21;
+  --vscode-tab-bg: #21222c;
+  --vscode-tab-active-bg: #282a36;
+  --vscode-tab-active-border-top: #bd93f9;
+  --vscode-editor-bg: #282a36;
+  --vscode-panel-bg: #21222c;
+  --vscode-terminal-bg: #191a21;
+  --vscode-statusbar-bg: #6272a4;
+  --vscode-statusbar-fg: #f8f8f2;
+  --vscode-statusbar-hover: #bd93f9;
+  --syn-comment: #6272a4;
+  --syn-keyword: #ff79c6;
+  --syn-function: #50fa7b;
+  --syn-string: #f1fa8c;
+  --syn-variable: #f8f8f2;
+  --syn-type: #8be9fd;
+}
+
+/* GitHub Dark Theme */
+[data-theme="github-dark"] {
+  --vscode-titlebar-bg: #0d1117;
+  --vscode-activitybar-bg: #090d13;
+  --vscode-sidebar-bg: #0d1117;
+  --vscode-tabs-bg: #090d13;
+  --vscode-tab-bg: #0d1117;
+  --vscode-tab-active-bg: #161b22;
+  --vscode-tab-active-border-top: #f78166;
+  --vscode-editor-bg: #0d1117;
+  --vscode-panel-bg: #090d13;
+  --vscode-terminal-bg: #090d13;
+  --vscode-statusbar-bg: #1f6feb;
+  --vscode-statusbar-fg: #ffffff;
+  --vscode-statusbar-hover: #388bfd;
+  --syn-comment: #8b949e;
+  --syn-keyword: #ff7b72;
+  --syn-function: #d2a8ff;
+  --syn-string: #a5d6ff;
+  --syn-variable: #c9d1d9;
+  --syn-type: #79c0ff;
+}
+
+/* Reset and box-sizing */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-family: var(--font-ui);
+  background-color: var(--vscode-editor-bg);
+  color: var(--vscode-editor-fg);
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+button {
+  background: none;
+  border: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  outline: none;
+}
+
+input {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  outline: none;
+}
+
+a {
+  color: var(--syn-link);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(121, 121, 121, 0.28);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(121, 121, 121, 0.5);
+}
+
+/* Accessibility: Visible Focus States */
+:focus-visible {
+  outline: 2px solid var(--vscode-tab-active-border-top, #007acc) !important;
+  outline-offset: 1px !important;
+}
+
+/* Touch & Mobile Tap Highlight */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button, a, .activity-btn, .menu-item, .editor-tab, .tree-item, .statusbar-item, .badge-pill, .project-link-btn {
+  touch-action: manipulation;
+}
+

@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Rahul Raj — Full Stack Developer · VS Code Portfolio</title>
+  <meta name="description" content="Interactive VS Code developer portfolio of Rahul Raj - Full Stack Developer, Builder, and Open source contributor.">
+  <meta name="author" content="Rahul Raj">
+  <meta name="theme-color" content="#1e1e1e">
+
+  <!-- Modern Typography: JetBrains Mono for Code, Inter for UI -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Core Stylesheets -->
+  <link rel="stylesheet" href="css/vscode-theme.css?v=4">
+  <link rel="stylesheet" href="css/layout.css?v=4">
+  <link rel="stylesheet" href="css/components.css?v=4">
+  <link rel="stylesheet" href="css/editor-content.css?v=4">
+</head>
+<body>
+
+  <div id="app-container">
+
+    <!-- ====================================================================
+         TOP TITLEBAR & MENU
+         ==================================================================== -->
+    <header class="vscode-titlebar" id="vscode-titlebar">
+      <div class="titlebar-left">
+        <!-- macOS Traffic Lights -->
+        <div class="traffic-lights">
+          <div class="traffic-light close" title="Reset View"></div>
+          <div class="traffic-light minimize" title="Toggle Terminal"></div>
+          <div class="traffic-light maximize" title="Toggle Fullscreen"></div>
+        </div>
+
+        <!-- Mobile Menu Button (< 768px) -->
+        <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Toggle Mobile Menu" title="Menu">
+          <svg viewBox="0 0 16 16" width="15" height="15" fill="currentColor">
+            <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
+          </svg>
+          <span class="mobile-menu-label">Menu</span>
+        </button>
+
+        <!-- Mobile Menu Dropdown -->
+        <div class="mobile-menu-dropdown" id="mobile-menu-dropdown">
+          <div class="mobile-menu-group-title">Navigation</div>
+          <div class="dropdown-entry" onclick="Editor.openFile('about/README.md'); UI.closeMobileMenu();"><span>📄 README.md (About)</span><span class="shortcut">⌘1</span></div>
+          <div class="dropdown-entry" onclick="Editor.openFile('projects/featured.ts'); UI.closeMobileMenu();"><span>🚀 Projects</span><span class="shortcut">⌘2</span></div>
+          <div class="dropdown-entry" onclick="Editor.openFile('skills/tech-stack.json'); UI.closeMobileMenu();"><span>⚡ Tech Stack</span><span class="shortcut">⌘3</span></div>
+          <div class="dropdown-entry" onclick="Editor.openFile('experience/career.yml'); UI.closeMobileMenu();"><span>💼 Experience</span></div>
+          <div class="dropdown-entry" onclick="Editor.openFile('connect/socials.ts'); UI.closeMobileMenu();"><span>🌐 Socials & Contact</span></div>
+          <div class="dropdown-divider"></div>
+          <div class="mobile-menu-group-title">Tools & Workspace</div>
+          <div class="dropdown-entry" onclick="UI.toggleSidebar(); UI.closeMobileMenu();"><span>📁 Toggle Explorer Sidebar</span><span class="shortcut">⌘B</span></div>
+          <div class="dropdown-entry" onclick="UI.togglePanel(); UI.closeMobileMenu();"><span>💻 Toggle Terminal Panel</span><span class="shortcut">⌘`</span></div>
+          <div class="dropdown-entry" onclick="CommandPalette.open(); UI.closeMobileMenu();"><span>🔍 Command Palette...</span><span class="shortcut">⌘K</span></div>
+          <div class="dropdown-entry" onclick="Terminal.run('echo $CONTACT'); UI.closeMobileMenu();"><span>📧 Copy Email</span></div>
+          <div class="dropdown-entry" onclick="window.print(); UI.closeMobileMenu();"><span>🖨️ Print / PDF Resume</span><span class="shortcut">⌘P</span></div>
+        </div>
+
+        <!-- VS Code Menu Bar (Desktop >= 768px) -->
+        <nav class="menubar" aria-label="Main Menu">
+          <div class="menu-item" id="menu-file">
+            File
+            <div class="menu-dropdown">
+              <div class="dropdown-entry" onclick="Editor.openFile('about/README.md')"><span>README.md</span><span class="shortcut">⌘1</span></div>
+              <div class="dropdown-entry" onclick="Editor.openFile('projects/featured.ts')"><span>Projects</span><span class="shortcut">⌘2</span></div>
+              <div class="dropdown-entry" onclick="Editor.openFile('skills/tech-stack.json')"><span>Tech Stack</span><span class="shortcut">⌘3</span></div>
+              <div class="dropdown-divider"></div>
+              <div class="dropdown-entry" onclick="window.print()"><span>Print / PDF Resume</span><span class="shortcut">⌘P</span></div>
+            </div>
+          </div>
+          <div class="menu-item" id="menu-edit">
+            Edit
+            <div class="menu-dropdown">
+              <div class="dropdown-entry" onclick="Terminal.run('echo $CONTACT')"><span>Copy Email</span></div>
+              <div class="dropdown-entry" onclick="CommandPalette.open()"><span>Find in Files</span><span class="shortcut">⌘F</span></div>
+            </div>
+          </div>
+          <div class="menu-item" id="menu-selection">Selection</div>
+          <div class="menu-item" id="menu-view">
+            View
+            <div class="menu-dropdown">
+              <div class="dropdown-entry" onclick="UI.toggleSidebar()"><span>Toggle Primary Side Bar</span><span class="shortcut">⌘B</span></div>
+              <div class="dropdown-entry" onclick="UI.togglePanel()"><span>Toggle Terminal Panel</span><span class="shortcut">⌘`</span></div>
+              <div class="dropdown-divider"></div>
+              <div class="dropdown-entry" onclick="CommandPalette.open()"><span>Command Palette...</span><span class="shortcut">⌘K</span></div>
+            </div>
+          </div>
+          <div class="menu-item" id="menu-go">Go</div>
+          <div class="menu-item" id="menu-run">
+            Run
+            <div class="menu-dropdown">
+              <div class="dropdown-entry" onclick="Terminal.run('projects')"><span>Run Project Demos</span><span class="shortcut">F5</span></div>
+            </div>
+          </div>
+          <div class="menu-item" id="menu-terminal">
+            Terminal
+            <div class="menu-dropdown">
+              <div class="dropdown-entry" onclick="UI.switchPanelTab('terminal')"><span>New Terminal</span><span class="shortcut">⌃`</span></div>
+              <div class="dropdown-entry" onclick="Terminal.run('clear')"><span>Clear Terminal</span><span class="shortcut">⌘K</span></div>
+            </div>
+          </div>
+          <div class="menu-item" id="menu-help">
+            Help
+            <div class="menu-dropdown">
+              <div class="dropdown-entry" onclick="Terminal.run('help')"><span>Portfolio Commands</span></div>
+              <div class="dropdown-entry" onclick="window.open('https://github.com', '_blank')"><span>GitHub Repository</span></div>
+            </div>
+          </div>
+        </nav>
+      </div>
+
+      <!-- Center: Quick Open / Title -->
+      <div class="titlebar-center">
+        <button class="command-search-btn" id="command-search-btn" title="Quick Open (⌘K)">
+          <svg viewBox="0 0 16 16" width="13" height="13" fill="currentColor">
+            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+          </svg>
+          <span class="search-title">rahulraj.dev — Visual Studio Code</span>
+          <span class="search-shortcut">⌘K</span>
+        </button>
+      </div>
+
+      <!-- Right: Controls -->
+      <div class="titlebar-right">
+        <button class="layout-toggle-btn" onclick="UI.toggleSidebar()" title="Toggle Sidebar (⌘B)">
+          <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor">
+            <path d="M2 3a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H2zm4 1v8H2V4h4zm1 0h7v8H7V4z"/>
+          </svg>
+        </button>
+        <button class="layout-toggle-btn" onclick="UI.togglePanel()" title="Toggle Panel (⌘`)">
+          <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor">
+            <path d="M2 3a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H2zm12 1v5H2V4h12zM2 12v-2h12v2H2z"/>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- ====================================================================
+         MAIN WORKBENCH ROW
+         ==================================================================== -->
+    <main class="vscode-workbench">
+
+      <!-- 1. ACTIVITY BAR (LEFT VERTICAL STRIP) -->
+      <aside class="vscode-activitybar" aria-label="Activity Bar">
+        <div class="activitybar-top">
+          <!-- Explorer -->
+          <div class="activity-btn active" data-view="explorer" title="Explorer (⇧⌘E)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M4 4h7l2 3h7v13H4V4z"/>
+            </svg>
+          </div>
+          <!-- Search -->
+          <div class="activity-btn" data-view="search" title="Search (⇧⌘F)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <circle cx="11" cy="11" r="8"/>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+          </div>
+          <!-- Source Control -->
+          <div class="activity-btn" data-view="git" title="Source Control (⌃⇧G)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <circle cx="18" cy="18" r="3"/>
+              <circle cx="6" cy="6" r="3"/>
+              <circle cx="6" cy="18" r="3"/>
+              <path d="M18 15V9a9 9 0 0 0-9-9H6"/>
+              <line x1="6" y1="9" x2="6" y2="15"/>
+            </svg>
+            <span class="activity-badge">3</span>
+          </div>
+          <!-- Run & Debug -->
+          <div class="activity-btn" data-view="debug" title="Run & Debug (⇧⌘D)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+              <circle cx="12" cy="12" r="4"/>
+            </svg>
+          </div>
+          <!-- Extensions -->
+          <div class="activity-btn" data-view="extensions" title="Extensions (⇧⌘X)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <rect x="4" y="4" width="7" height="7"/>
+              <rect x="4" y="13" width="7" height="7"/>
+              <rect x="13" y="13" width="7" height="7"/>
+              <path d="M14 4h4a2 2 0 0 1 2 2v4"/>
+            </svg>
+          </div>
+        </div>
+
+        <div class="activitybar-bottom">
+          <!-- Profile -->
+          <div class="activity-btn" onclick="Editor.openFile('about/profile.json')" title="Rahul (Profile)">
+            <img src="assets/avatar.jpg" alt="Profile" style="width: 24px; height: 24px; border-radius: 50%; object-fit: cover; border: 1.5px solid rgba(255,255,255,0.3);">
+          </div>
+          <!-- Settings / Theme -->
+          <div class="activity-btn" onclick="CommandPalette.open()" title="Settings & Themes">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <circle cx="12" cy="12" r="3"/>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+            </svg>
+          </div>
+        </div>
+      </aside>
+
+      <!-- 2. SIDEBAR (EXPLORER) -->
+      <aside class="vscode-sidebar" id="vscode-sidebar" aria-label="Sidebar">
+        <div class="sidebar-header">
+          <span>EXPLORER</span>
+          <div class="sidebar-actions">
+            <button class="sidebar-action-btn sidebar-close-mobile" id="sidebar-close-mobile" title="Close Sidebar" aria-label="Close Sidebar">✕</button>
+            <span class="sidebar-action-btn" title="More Actions" style="font-size: 15px; letter-spacing: 1px;">···</span>
+          </div>
+        </div>
+
+        <div class="sidebar-content">
+          <!-- Accordion: Root folder -->
+          <div class="sidebar-section">
+            <div class="sidebar-section-header">
+              <span class="chevron-icon">
+                <svg viewBox="0 0 16 16" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4 6l4 4 4-4"/>
+                </svg>
+              </span>
+              <span>RAHUL-RAJ</span>
+            </div>
+
+            <div class="sidebar-section-body">
+              <ul class="file-tree" id="file-tree">
+
+                <!-- Folder: about -->
+                <li class="tree-folder-group">
+                  <div class="tree-item folder">
+                    <span class="folder-chevron">
+                      <svg viewBox="0 0 16 16" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 6l4 4 4-4"/>
+                      </svg>
+                    </span>
+                    <span class="tree-item-icon folder-icon">
+                      <svg width="15" height="15" viewBox="0 0 16 16" fill="none" class="folder-svg">
+                        <path d="M1 3.5C1 2.67 1.67 2 2.5 2H6L7.5 4H13.5C14.33 4 15 4.67 15 5.5V12.5C15 13.33 14.33 14 13.5 14H2.5C1.67 14 1 13.33 1 12.5V3.5Z" fill="#78909c"/>
+                        <path d="M1 5.5H15V12.5C15 13.33 14.33 14 13.5 14H2.5C1.67 14 1 13.33 1 12.5V5.5Z" fill="#90a4ae"/>
+                        <path d="M1.5 6.5H14.5L13.2 13.5H2.8L1.5 6.5Z" fill="#cfd8dc"/>
+                      </svg>
+                    </span>
+                    <span>about</span>
+                  </div>
+                  <ul>
+                    <li class="tree-item active" data-path="about/README.md">
+                      <span class="indent"></span>
+                      <span class="tree-item-icon"><span class="file-icon-square icon-md"></span></span>
+                      <span>README.md</span>
+                    </li>
+                    <li class="tree-item" data-path="about/profile.json">
+                      <span class="indent"></span>
+                      <span class="tree-item-icon"><span class="file-icon-square icon-json"></span></span>
+                      <span>profile.json</span>
+                    </li>
+                  </ul>
+                </li>
+
+                <!-- Folder: youtube -->
+                <li class="tree-folder-group">
+                  <div class="tree-item folder">
+                    <span class="folder-chevron">
+                      <svg viewBox="0 0 16 16" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 6l4 4 4-4"/>
+                      </svg>
+                    </span>
+                    <span class="tree-item-icon folder-icon">
+                      <svg width="15" height="15" viewBox="0 0 16 16" fill="none" class="folder-svg">
+                        <path d="M1 3.5C1 2.67 1.67 2 2.5 2H6L7.5 4H13.5C14.33 4 15 4.67 15 5.5V12.5C15 13.33 14.33 14 13.5 14H2.5C1.67 14 1 13.33 1 12.5V3.5Z" fill="#78909c"/>
+                        <path d="M1 5.5H15V12.5C15 13.33 14.33 14 13.5 14H2.5C1.67 14 1 13.33 1 12.5V5.5Z" fill="#90a4ae"/>
+                        <path d="M1.5 6.5H14.5L13.2 13.5H2.8L1.5 6.5Z" fill="#cfd8dc"/>
+                      </svg>
+                    </span>
+                    <span>youtube</span>
+                  </div>
+                  <ul>
+                    <li class="tree-item" data-path="youtube/channels.yml">
+                      <span class="indent"></span>
+                      <span class="tree-item-icon"><span class="file-icon-square icon-yml"></span></span>
+                      <span>channels.yml</span>
+                    </li>
+                  </ul>
+                </li>
+
+                <!-- Folder: platforms -->
+                <li class="tree-folder-group">
+                  <div class="tree-item folder">
+                    <span class="folder-chevron">
+                      <svg viewBox="0 0 16 16" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 6l4 4 4-4"/>
+                      </svg>
+                    </span>
+                    <span class="tree-item-icon folder-icon">
+                      <svg width="15" height="15" viewBox="0 0 16 16" fill="none" class="folder-svg">
+                        <path d="M1 3.5C1 2.67 1.67 2 2.5 2H6L7.5 4H13.5C14.33 4 15 4.67 15 5.5V12.5C15 13.33 14.33 14 13.5 14H2.5C1.67 14 1 13.33 1 12.5V3.5Z" fill="#78909c"/>
+                        <path d="M1 5.5H15V12.5C15 13.33 14.33 14 13.5 14H2.5C1.67 14 1 13.33 1 12.5V5.5Z" fill="#90a4ae"/>
+                        <path d="M1.5 6.5H14.5L13.2 13.5H2.8L1.5 6.5Z" fill="#cfd8dc"/>
+                      </svg>
+                    </span>
+                    <span>platforms</span>
+                  </div>
+                  <ul>
+                    <li class="tree-item" data-path="platforms/platforms.tsx">
+                      <span class="indent"></span>
+                      <span class="tree-item-icon"><span class="file-icon-square icon-tsx"></span></span>
+                      <span>platforms.tsx</span>
+                    </li>
+                  </ul>
+                </li>
+
+                <!-- Folder: udemy -->
+                <li class="tree-folder-group">
+                  <div class="tree-item folder">
+                    <span class="folder-chevron">
+                      <svg viewBox="0 0 16 16" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 6l4 4 4-4"/>
+                      </svg>
+                    </span>
+                    <span class="tree-item-icon folder-icon">
+                      <svg width="15" height="15" viewBox="0 0 16 16" fill="none" class="folder-svg">
+                        <path d="M1 3.5C1 2.67 1.67 2 2.5 2H6L7.5 4H13.5C14.33 4 15 4.67 15 5.5V12.5C15 13.33 14.33 14 13.5 14H2.5C1.67 14 1 13.33 1 12.5V3.5Z" fill="#78909c"/>
+                        <path d="M1 5.5H15V12.5C15 13.33 14.33 14 13.5 14H2.5C1.67 14 1 13.33 1 12.5V5.5Z" fill="#90a4ae"/>
+                        <path d="M1.5 6.5H14.5L13.2 13.5H2.8L1.5 6.5Z" fill="#cfd8dc"/>
+                      </svg>
+                    </span>
+                    <span>udemy</span>
+                  </div>
+                  <ul>
+                    <li class="tree-item" data-path="udemy/courses.md">
+                      <span class="indent"></span>
+                      <span class="tree-item-icon"><span class="file-icon-square icon-md"></span></span>
+                      <span>courses.md</span>
+                    </li>
+                  </ul>
+                </li>
+
+                <!-- Folder: products -->
+                <li class="tree-folder-group">
+                  <div class="tree-item folder">
+                    <span class="folder-chevron">
+                      <svg viewBox="0 0 16 16" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 6l4 4 4-4"/>
+                      </svg>
+                    </span>
+                    <span class="tree-item-icon folder-icon">
+                      <svg width="15" height="15" viewBox="0 0 16 16" fill="none" class="folder-svg">
+                        <path d="M1 3.5C1 2.67 1.67 2 2.5 2H6L7.5 4H13.5C14.33 4 15 4.67 15 5.5V12.5C15 13.33 14.33 14 13.5 14H2.5C1.67 14 1 13.33 1 12.5V3.5Z" fill="#78909c"/>
+                        <path d="M1 5.5H15V12.5C15 13.33 14.33 14 13.5 14H2.5C1.67 14 1 13.33 1 12.5V5.5Z" fill="#90a4ae"/>
+                        <path d="M1.5 6.5H14.5L13.2 13.5H2.8L1.5 6.5Z" fill="#cfd8dc"/>
+                      </svg>
+                    </span>
+                    <span>products</span>
+                  </div>
+                  <ul>
+                    <li class="tree-item" data-path="products/products.json">
+                      <span class="indent"></span>
+                      <span class="tree-item-icon"><span class="file-icon-square icon-json"></span></span>
+                      <span>products.json</span>
+                    </li>
+                  </ul>
+                </li>
+
+                <!-- Folder: connect -->
+                <li class="tree-folder-group">
+                  <div class="tree-item folder">
+                    <span class="folder-chevron">
+                      <svg viewBox="0 0 16 16" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 6l4 4 4-4"/>
+                      </svg>
+                    </span>
+                    <span class="tree-item-icon folder-icon">
+                      <svg width="15" height="15" viewBox="0 0 16 16" fill="none" class="folder-svg">
+                        <path d="M1 3.5C1 2.67 1.67 2 2.5 2H6L7.5 4H13.5C14.33 4 15 4.67 15 5.5V12.5C15 13.33 14.33 14 13.5 14H2.5C1.67 14 1 13.33 1 12.5V3.5Z" fill="#78909c"/>
+                        <path d="M1 5.5H15V12.5C15 13.33 14.33 14 13.5 14H2.5C1.67 14 1 13.33 1 12.5V5.5Z" fill="#90a4ae"/>
+                        <path d="M1.5 6.5H14.5L13.2 13.5H2.8L1.5 6.5Z" fill="#cfd8dc"/>
+                      </svg>
+                    </span>
+                    <span>connect</span>
+                  </div>
+                  <ul>
+                    <li class="tree-item" data-path="connect/socials.ts">
+                      <span class="indent"></span>
+                      <span class="tree-item-icon"><span class="file-icon-square icon-tsx"></span></span>
+                      <span>socials.ts</span>
+                    </li>
+                  </ul>
+                </li>
+
+                <!-- Root level files -->
+                <li class="tree-item" data-path="LICENSE.txt">
+                  <span class="tree-item-icon"><span class="file-icon-square icon-txt"></span></span>
+                  <span>LICENSE.txt</span>
+                </li>
+                <li class="tree-item" data-path=".gitignore">
+                  <span class="tree-item-icon"><span class="file-icon-square icon-git"></span></span>
+                  <span>.gitignore</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Accordion: OUTLINE -->
+          <div class="sidebar-section" style="margin-top: 20px;">
+            <div class="sidebar-section-header">
+              <span class="chevron-icon">
+                <svg viewBox="0 0 16 16" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4 6l4 4 4-4"/>
+                </svg>
+              </span>
+              <span>OUTLINE</span>
+            </div>
+            <div class="sidebar-section-body" id="sidebar-outline-list" style="padding: 6px 16px; color: #858585; font-style: italic; font-size: 16px;">
+              No symbols found
+            </div>
+          </div>
+        </div>
+
+        <!-- Sidebar Resizer -->
+        <div class="sidebar-resizer" id="sidebar-resizer"></div>
+      </aside>
+
+      <!-- Mobile Sidebar Backdrop Overlay -->
+      <div class="sidebar-backdrop" id="sidebar-backdrop" aria-hidden="true"></div>
+
+      <!-- 3. EDITOR & PANEL GROUP -->
+      <section class="vscode-editor-group" aria-label="Editor Area">
+
+        <!-- Tabs Strip -->
+        <div class="editor-tabs-bar" id="editor-tabs">
+          <!-- Injected dynamically by editor.js -->
+        </div>
+
+        <!-- Breadcrumbs Strip -->
+        <div class="editor-breadcrumbs" id="editor-breadcrumbs">
+          <span class="breadcrumb-item">RAHUL-DEV</span>
+          <span class="breadcrumb-separator">&gt;</span>
+          <span class="breadcrumb-item">about</span>
+          <span class="breadcrumb-separator">&gt;</span>
+          <span class="breadcrumb-item">README.md</span>
+        </div>
+
+        <!-- Main Editor Scroll Canvas -->
+        <div class="editor-main-view">
+          <div class="editor-scroll-area" id="editor-scroll-area">
+            <!-- Line Numbers Gutter -->
+            <div class="line-numbers-gutter" id="line-numbers-gutter"></div>
+            <!-- Rendered Code Content -->
+            <div class="editor-code-container" id="editor-code-container"></div>
+          </div>
+
+          <!-- Code Minimap (Right side) -->
+          <div class="editor-minimap" id="editor-minimap" title="Minimap (Click to scroll)">
+            <div class="minimap-content" id="minimap-content"></div>
+            <div class="minimap-slider" id="minimap-slider"></div>
+          </div>
+        </div>
+
+        <!-- Panel Resizer Handle -->
+        <div class="panel-resizer" id="panel-resizer"></div>
+
+        <!-- ================================================================
+             BOTTOM PANEL (TERMINAL, PROBLEMS, OUTPUT, PORTS)
+             ================================================================ -->
+        <section class="vscode-panel" id="vscode-panel" aria-label="Bottom Panel">
+          <div class="panel-header">
+            <div class="panel-tabs">
+              <div class="panel-tab" data-view="problems">PROBLEMS <span style="font-size: 11px; margin-left: 2px;">(0)</span></div>
+              <div class="panel-tab" data-view="output">OUTPUT</div>
+              <div class="panel-tab" data-view="debug">DEBUG CONSOLE</div>
+              <div class="panel-tab active" data-view="terminal">TERMINAL <span style="font-size: 11px; margin-left: 2px;">(1)</span></div>
+              <div class="panel-tab" data-view="ports">PORTS</div>
+            </div>
+
+            <div class="panel-actions">
+              <span class="panel-action-btn" title="Clear Terminal" onclick="Terminal.executeCommand('clear')">
+                <svg viewBox="0 0 16 16" width="13" height="13" fill="currentColor">
+                  <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                  <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                </svg>
+              </span>
+              <span class="panel-action-btn" id="panel-max-btn" title="Toggle Size">
+                <svg viewBox="0 0 16 16" width="13" height="13" fill="currentColor">
+                  <path fill-rule="evenodd" d="M7.646 2.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 3.707 2.354 9.354a.5.5 0 1 1-.708-.708l6-6z"/>
+                </svg>
+              </span>
+              <span class="panel-action-btn" id="panel-close-btn" title="Close Panel (⌘`)">
+                <svg viewBox="0 0 16 16" width="13" height="13" fill="currentColor">
+                  <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                </svg>
+              </span>
+            </div>
+          </div>
+
+          <!-- Panel Views -->
+          <div class="panel-content">
+            <!-- TERMINAL VIEW -->
+            <div class="panel-view active" id="panel-terminal">
+              <div class="terminal-container" id="terminal-container">
+                <div class="terminal-history" id="terminal-history"></div>
+                <!-- Interactive Input Line -->
+                <div class="terminal-prompt-wrapper" id="terminal-prompt-wrapper">
+                  <span class="terminal-prompt-path">~/rahul.dev</span>
+                  <span class="terminal-prompt-branch">(main)</span>
+                  <span class="terminal-prompt-symbol">$</span>
+                  <input type="text" id="terminal-input" class="terminal-input-field" spellcheck="false" autocomplete="off" autofocus placeholder="type 'help' or commands...">
+                </div>
+              </div>
+            </div>
+
+            <!-- PROBLEMS VIEW -->
+            <div class="panel-view" id="panel-problems">
+              <div class="problems-view">
+                <div class="problems-empty">
+                  <svg viewBox="0 0 16 16" width="16" height="16" fill="#3fb950"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/></svg>
+                  <span>No problems have been detected in the workspace. Clean build! 🚀</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- OUTPUT VIEW -->
+            <div class="panel-view" id="panel-output">
+              <div class="output-view">
+                <div class="output-log-line" style="color: #58a6ff;">[Info] Ready in 142ms · rahul.dev compiled successfully.</div>
+                <div class="output-log-line" style="color: #7ee787;">[Info] Environment: Production (Static Assets Optimized)</div>
+                <div class="output-log-line" style="color: #8b949e;">[Telemetry] Web Vitals: LCP 0.3s · FID 2ms · CLS 0.00</div>
+              </div>
+            </div>
+
+            <!-- DEBUG VIEW -->
+            <div class="panel-view" id="panel-debug">
+              <div class="debug-view">
+                <div style="color: #8b949e;">Debugger listening on ws://127.0.0.1:9229</div>
+                <div style="color: #7ee787;">Debugger attached. All breakpoints satisfied.</div>
+              </div>
+            </div>
+
+            <!-- PORTS VIEW -->
+            <div class="panel-view" id="panel-ports">
+              <div class="ports-view">
+                <div class="port-item">
+                  <span class="port-badge">3000</span>
+                  <span style="color: #ffffff;">http://localhost:3000</span>
+                  <span style="color: #7ee787;">● Forwarded (Portfolio Web Server)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </section>
+
+    </main>
+
+    <!-- ====================================================================
+         FLOATING WEBCAM WIDGET (Bottom-Left Corner, like Hitesh's webcam)
+         ==================================================================== -->
+    <div class="floating-webcam-widget" id="floating-webcam-widget" title="Rahul Raj (Full Stack Developer)">
+      <img src="assets/avatar.jpg" alt="Rahul Raj" class="webcam-avatar-img">
+      <div class="webcam-live-badge">
+        <span class="pulse-dot"></span>
+        <span>LIVE</span>
+      </div>
+      <div class="webcam-tooltip">
+        <div class="webcam-tooltip-name">Rahul Raj</div>
+        <div class="webcam-tooltip-role">Full Stack Developer · Builder · Open source contributor</div>
+      </div>
+      <div class="webcam-controls">
+        <span class="webcam-ctrl-btn" id="webcam-mic-btn" title="Toggle Mic" data-muted="false">🎤</span>
+        <span class="webcam-ctrl-btn" id="webcam-cam-btn" title="Toggle Camera Filter">📹</span>
+      </div>
+    </div>
+
+    <!-- ====================================================================
+         BOTTOM STATUS BAR
+         ==================================================================== -->
+    <footer class="vscode-statusbar" id="vscode-statusbar">
+      <div class="statusbar-left">
+        <div class="statusbar-item" onclick="Editor.openFile('.gitignore')" title="Git Branch: main">
+          <svg viewBox="0 0 16 16" width="12" height="12" fill="currentColor">
+            <path fill-rule="evenodd" d="M11.75 2.5a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5zm-2.25.75a2.25 2.25 0 1 1 3 2.122V6A2.5 2.5 0 0 1 10 8.5H6a1 1 0 0 0-1 1v1.128a2.251 2.251 0 1 1-1.5 0V5.372a2.25 2.25 0 1 1 1.5 0v1.836A2.492 2.492 0 0 1 6 7h4a1 1 0 0 0 1-1v-.628A2.25 2.25 0 0 1 9.5 3.25zM4.25 12a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5zM3.5 3.25a.75.75 0 1 1 1.5 0 .75.75 0 0 1-1.5 0z"/>
+          </svg>
+          <span>main*</span>
+        </div>
+
+        <div class="statusbar-item hide-small-mobile" title="Synchronize Changes">
+          <svg viewBox="0 0 16 16" width="12" height="12" fill="currentColor">
+            <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-7.068 2h-3.932a.25.25 0 0 1-.192-.41l1.966-2.36a.25.25 0 0 1 .384 0l1.966 2.36a.25.25 0 0 1-.192.41z"/>
+          </svg>
+        </div>
+
+        <div class="statusbar-item" onclick="UI.switchPanelTab('problems')" title="0 Errors, 0 Warnings">
+          <span class="statusbar-badge">
+            <svg viewBox="0 0 16 16" width="12" height="12" fill="currentColor"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/><path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/></svg>
+            <span>0</span>
+          </span>
+          <span class="statusbar-badge" style="margin-left: 4px;">
+            <svg viewBox="0 0 16 16" width="12" height="12" fill="currentColor"><path d="M7.938 2.016a.13.13 0 0 1 .125 0l6.857 11.656c.028.05-.006.11-.062.11H1.142c-.056 0-.09-.06-.062-.11L7.938 2.016zM8 0a1 1 0 0 0-.86.49l-6.858 11.66A1 1 0 0 0 1.143 14h13.714a1 1 0 0 0 .86-1.85L8.86.49A1 1 0 0 0 8 0z"/><path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/></svg>
+            <span>0</span>
+          </span>
+        </div>
+
+        <div class="statusbar-item hide-mobile" onclick="Editor.openFile('products/products.json')">
+          <span>⭐ 10+ GitHub Stars</span>
+        </div>
+      </div>
+
+      <div class="statusbar-right">
+        <div class="statusbar-item hide-mobile" id="status-ln-col">Ln 1, Col 1</div>
+        <div class="statusbar-item hide-tablet">Spaces: 2</div>
+        <div class="statusbar-item hide-tablet">UTF-8</div>
+        <div class="statusbar-item hide-tablet">LF</div>
+        <div class="statusbar-item" id="status-language" onclick="CommandPalette.open()">Markdown</div>
+        <div class="statusbar-item hide-mobile" onclick="Terminal.run('echo $CONTACT')" title="Email Contact">
+          <span>📧 rahulrajmaurya6205@gmail.com</span>
+        </div>
+        <div class="statusbar-item" title="Notifications" onclick="UI.showToast('All notifications read. Systems nominal!')">
+          <svg viewBox="0 0 16 16" width="12" height="12" fill="currentColor">
+            <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zM8 1.918l-.797.161A4.002 4.002 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4.002 4.002 0 0 0-3.203-3.92L8 1.917zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5.002 5.002 0 0 1 13 6c0 .88.32 4.2 1.22 6z"/>
+          </svg>
+        </div>
+      </div>
+    </footer>
+
+    <!-- ====================================================================
+         COMMAND PALETTE / QUICK OPEN MODAL
+         ==================================================================== -->
+    <div class="command-palette-backdrop" id="command-palette-backdrop">
+      <div class="command-palette-modal">
+        <div class="palette-input-wrapper">
+          <span class="palette-search-icon">🔍</span>
+          <input type="text" id="palette-input" class="palette-input" placeholder="Type a file name or '>' for commands..." autocomplete="off" spellcheck="false">
+        </div>
+        <ul class="palette-results-list" id="palette-results-list">
+          <!-- Injected dynamically by command-palette.js -->
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/data.js?v=4"></script>
+  <script src="js/terminal.js?v=4"></script>
+  <script src="js/command-palette.js?v=4"></script>
+  <script src="js/editor.js?v=4"></script>
+  <script src="js/ui.js?v=4"></script>
+  <script src="js/app.js?v=4"></script>
+</body>
+</html>

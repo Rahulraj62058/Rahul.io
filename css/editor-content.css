@@ -1,0 +1,609 @@
+/* ==========================================================================
+   EDITOR CONTENT & SYNTAX HIGHLIGHTING
+   Renders markdown, code, comments, badges, and project highlights
+   ========================================================================== */
+
+.code-view {
+  font-family: var(--font-code);
+  font-size: clamp(13.5px, 1.15vw, 15px);
+  line-height: 1.5;
+  tab-size: 2;
+  color: var(--vscode-editor-fg);
+  max-width: 100%;
+  min-width: 0;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+/* Syntax Token Classes */
+.tok-comment { color: var(--syn-comment); font-style: italic; }
+.tok-keyword { color: var(--syn-keyword); font-weight: 500; }
+.tok-control { color: var(--syn-control); }
+.tok-string { color: var(--syn-string); }
+.tok-number { color: var(--syn-number); }
+.tok-function { color: var(--syn-function); }
+.tok-variable { color: var(--syn-variable); }
+.tok-property { color: var(--syn-property); }
+.tok-type { color: var(--syn-type); }
+.tok-tag { color: var(--syn-tag); }
+.tok-attribute { color: var(--syn-attribute); }
+.tok-operator { color: var(--syn-operator); }
+.tok-punctuation { color: var(--syn-punctuation); }
+.tok-heading { color: var(--syn-heading); font-weight: bold; }
+.tok-link { color: var(--syn-link); text-decoration: underline; cursor: pointer; }
+.tok-link:hover { color: #79b8ff; }
+.tok-email { color: var(--syn-link); cursor: pointer; }
+
+/* Word wrap: rendered prose must never force horizontal scrolling.
+   (The editor canvas is white-space: pre for code, so prose opts back in.) */
+.md-h1,
+.md-h2,
+.md-h3,
+.md-paragraph,
+.doc-header-comment,
+.project-desc,
+.timeline-desc,
+.skills-category-block,
+.badge-list,
+.hl-row {
+  white-space: normal;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+/* Markdown Rich Elements inside Editor */
+.doc-header-comment {
+  color: var(--syn-comment);
+  margin-bottom: 24px;
+  line-height: 30px;
+}
+
+.doc-header-comment .highlight-tag {
+  color: #569cd6;
+  font-style: normal;
+}
+
+.doc-header-comment .highlight-val {
+  color: #4ec9b0;
+  font-style: normal;
+}
+
+.md-h1 {
+  font-size: clamp(25px, 3vw, 34px);
+  line-height: 1.3;
+  color: #ffffff;
+  font-weight: 700;
+  margin: 18px 0 14px 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 100%;
+  min-width: 0;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.md-h1 .blinking-cursor {
+  display: inline-block;
+  width: 0.32em;
+  height: 1.05em;
+  background-color: #58a6ff;
+  animation: blink-cursor 1s infinite steps(2, start);
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+
+@keyframes blink-cursor {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.md-h2 {
+  font-size: clamp(21px, 2.5vw, 30px);
+  line-height: 1.4;
+  color: #e6edf3;
+  font-weight: 600;
+  margin: 28px 0 12px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding-bottom: 6px;
+  max-width: 100%;
+  min-width: 0;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.md-h3 {
+  font-size: clamp(19px, 2vw, 26px);
+  color: #79c0ff;
+  font-weight: 600;
+  margin: 18px 0 8px 0;
+  max-width: 100%;
+  min-width: 0;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.md-paragraph {
+  font-family: var(--font-code);
+  font-size: clamp(13.5px, 1.15vw, 15px);
+  line-height: 1.6;
+  color: #cccccc;
+  margin-bottom: 18px;
+  max-width: 100%;
+  min-width: 0;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+/* Badge list (like Hitesh's badges in screenshot) */
+.badge-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0 24px 0;
+}
+
+.badge-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background-color: var(--vscode-badge-bg);
+  border: 1px solid var(--vscode-badge-border);
+  color: var(--vscode-badge-fg);
+  padding: 5px 10px;
+  border-radius: 14px;
+  font-size: clamp(11.5px, 1.05vw, 13px);
+  font-family: var(--font-ui);
+  font-weight: 500;
+  transition: all 0.15s ease;
+  user-select: none;
+  white-space: normal;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  max-width: 100%;
+  min-height: 28px;
+}
+
+.badge-bullet {
+  font-size: clamp(10.5px, 0.95vw, 12px);
+  color: #7ee787;
+}
+
+.badge-pill:hover {
+  background-color: rgba(88, 166, 255, 0.15);
+  border-color: #58a6ff;
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.badge-pill.clickable {
+  cursor: pointer;
+}
+
+.badge-bullet {
+  font-size: clamp(10.5px, 0.95vw, 12px);
+  color: #7ee787;
+}
+
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+  gap: 16px;
+  margin: 16px 0 28px 0;
+}
+
+.project-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 16px;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-width: 0;
+}
+
+.project-card:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(88, 166, 255, 0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+}
+
+.project-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.project-title {
+  font-size: clamp(17px, 1.8vw, 22px);
+  font-weight: 600;
+  color: #58a6ff;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 100%;
+  min-width: 0;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.project-links {
+  display: flex;
+  gap: 8px;
+}
+
+.project-link-btn {
+  font-size: clamp(12.5px, 1.15vw, 14px);
+  color: #a5d6ff;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 3px 8px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.project-link-btn:hover {
+  background: #007acc;
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.project-desc {
+  font-size: clamp(13.5px, 1.15vw, 15px);
+  line-height: 1.5;
+  color: #a0a0a0;
+  margin-bottom: 12px;
+  max-width: 100%;
+  min-width: 0;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.project-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.project-tag {
+  font-size: clamp(11.5px, 1.05vw, 13px);
+  background: rgba(255, 255, 255, 0.05);
+  color: #7ee787;
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-family: var(--font-code);
+  white-space: nowrap;
+}
+
+/* Career Timeline */
+.timeline-container {
+  margin: 16px 0 28px 0;
+  position: relative;
+  padding-left: 20px;
+}
+
+.timeline-container::before {
+  content: "";
+  position: absolute;
+  left: 6px;
+  top: 8px;
+  bottom: 8px;
+  width: 2px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 24px;
+}
+
+.timeline-dot {
+  position: absolute;
+  left: -20px;
+  top: 5px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #007acc;
+  box-shadow: 0 0 0 3px rgba(0, 122, 204, 0.3);
+}
+
+.timeline-role {
+  font-size: clamp(17px, 1.5vw, 19px);
+  font-weight: 600;
+  color: #ffffff;
+  max-width: 100%;
+  min-width: 0;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.timeline-company {
+  color: #58a6ff;
+}
+
+.timeline-period {
+  font-size: clamp(13.5px, 1.2vw, 15px);
+  color: #8b949e;
+  margin-bottom: 6px;
+}
+
+.timeline-desc {
+  font-size: clamp(13.5px, 1.2vw, 15px);
+  color: #cccccc;
+  line-height: 1.5;
+  max-width: 100%;
+  min-width: 0;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+/* Skills category list */
+.skills-category-block {
+  margin-bottom: 20px;
+}
+
+.skills-category-title {
+  font-size: clamp(17px, 1.5vw, 19px);
+  color: #d2a8ff;
+  font-weight: 600;
+  margin-bottom: 8px;
+  max-width: 100%;
+  min-width: 0;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.skill-pill-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.skill-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: clamp(11.5px, 1.05vw, 13px);
+  color: #e6edf3;
+  white-space: nowrap;
+}
+
+.skill-pill .skill-level {
+  font-size: clamp(10.5px, 0.95vw, 12px);
+  color: #e3b341;
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   SINGLE-FRAME DOCUMENT (compact About landing)
+   Typography is em based and driven by a single --doc-scale variable that
+   editor.js tunes until the document stops overflowing the editor viewport.
+   ========================================================================== */
+
+.doc-compact {
+  font-size: calc(15px * var(--doc-scale, 1));
+  line-height: 1.7;
+}
+
+.doc-compact .doc-header-comment {
+  font-size: 1em;
+  line-height: 1.5;
+  margin-bottom: 0.5em;
+}
+
+.doc-compact .md-h1 {
+  font-size: 1.85em;
+  line-height: 1.3;
+  margin: 0.2em 0 0.4em 0;
+}
+
+.doc-compact .md-h1 .blinking-cursor {
+  width: 0.36em;
+  height: 1.1em;
+}
+
+.doc-compact .md-h2 {
+  font-size: 1.25em;
+  line-height: 1.4;
+  margin: 0.9em 0 0.35em 0;
+  padding-bottom: 0.22em;
+}
+
+.doc-compact .md-paragraph {
+  font-size: 1em;
+  line-height: 1.55;
+  margin-bottom: 0.6em;
+}
+
+.doc-compact .badge-list {
+  gap: 0.45em;
+  margin: 0.4em 0 0.2em 0;
+}
+
+.doc-compact .badge-pill {
+  font-size: 0.9em;
+  padding: 0.22em 0.7em;
+}
+
+/* Sections stacked in series, one block after another */
+.doc-series {
+  display: flex;
+  flex-direction: column;
+}
+
+.doc-series > div + div {
+  margin-top: 0.25em;
+  padding-top: 0.25em;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.doc-series .md-h2 {
+  margin-top: 0.35em;
+}
+
+.doc-series > div:last-child .md-paragraph {
+  margin-bottom: 0;
+}
+
+/* Compact highlight rows (replaces full height project cards) */
+.hl-list {
+  margin-top: 0.15em;
+}
+
+.hl-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0 0.6em;
+  font-size: 1em;
+  line-height: 1.5;
+  margin-bottom: 0.2em;
+  max-width: 100%;
+  min-width: 0;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.hl-name {
+  color: #58a6ff;
+  font-weight: 600;
+  max-width: 100%;
+  min-width: 0;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.hl-sep {
+  color: #484f58;
+  flex-shrink: 0;
+}
+
+.hl-stack {
+  color: #7ee787;
+  font-family: var(--font-code);
+  font-size: 0.95em;
+  max-width: 100%;
+  min-width: 0;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+/* Compact documents do not need the generous scroll-past-end padding */
+.editor-code-container:has(.doc-compact) {
+  padding-bottom: calc(24px * var(--doc-scale, 1));
+}
+
+/* Preformatted blocks (LICENSE, .gitignore) still wrap instead of scrolling */
+.code-view pre {
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+/* ==========================================================================
+   RESPONSIVE CONTENT ADJUSTMENTS
+   ========================================================================== */
+@media (max-width: 767px) {
+  .doc-compact {
+    font-size: 14px !important;
+    line-height: 1.6 !important;
+  }
+
+  .doc-compact .md-h1 {
+    font-size: 1.6em !important;
+  }
+
+  .doc-compact .md-h2 {
+    font-size: 1.2em !important;
+  }
+
+  .doc-compact .badge-pill {
+    font-size: 0.88em !important;
+  }
+
+  .timeline-container {
+    padding-left: 18px;
+  }
+
+  .timeline-dot {
+    left: -18px;
+    width: 9px;
+    height: 9px;
+  }
+
+  .skills-category-block {
+    margin-bottom: 16px;
+  }
+
+  .skill-pill {
+    padding: 3px 8px;
+    font-size: 11.5px;
+  }
+}
+
+@media (max-width: 480px) {
+  .projects-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .project-card {
+    padding: 12px;
+  }
+
+  .project-title {
+    font-size: 16px;
+  }
+
+  .project-desc {
+    font-size: 13px;
+  }
+
+  .timeline-container {
+    padding-left: 14px;
+  }
+
+  .timeline-dot {
+    left: -14px;
+    width: 8px;
+    height: 8px;
+  }
+
+  .timeline-role {
+    font-size: 15px;
+  }
+
+  .timeline-desc {
+    font-size: 12.5px;
+  }
+}
+
+@media (max-width: 360px) {
+  .doc-compact {
+    font-size: 13px !important;
+  }
+
+  .doc-compact .md-h1 {
+    font-size: 1.4em !important;
+  }
+
+  .skill-pill {
+    font-size: 10.5px;
+    padding: 2px 6px;
+  }
+}

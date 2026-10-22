@@ -1,0 +1,17 @@
+{
+  "name": "rahul-vscode-portfolio",
+  "version": "1.0.0",
+  "description": "VS Code themed interactive developer portfolio",
+  "scripts": {
+    "start": "npx serve . -p 3000",
+    "dev": "npx serve . -p 3000"
+  },
+  "keywords": [
+    "portfolio",
+    "vscode",
+    "developer-portfolio",
+    "interactive"
+  ],
+  "author": "Rahul",
+  "license": "MIT"
+}

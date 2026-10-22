@@ -1,0 +1,444 @@
+/* ==========================================================================
+   VS CODE COMPONENTS
+   Terminal, Webcam Widget, Command Palette, Panels, Notifications
+   ========================================================================== */
+
+/* ==========================================================================
+   FLOATING WEBCAM / PROFILE AVATAR WIDGET (Like Hitesh's live camera widget)
+   ========================================================================== */
+.floating-webcam-widget {
+  position: absolute;
+  bottom: 34px;
+  left: 56px;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  z-index: 150;
+  cursor: grab;
+  user-select: none;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6), 0 0 0 3px rgba(0, 122, 204, 0.4);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;
+}
+
+.floating-webcam-widget:hover {
+  transform: scale(1.04);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.8), 0 0 0 4px rgba(0, 122, 204, 0.8);
+}
+
+.webcam-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  display: block;
+}
+
+/* Live stream status badge */
+.webcam-live-badge {
+  position: absolute;
+  top: 4px;
+  right: 8px;
+  background-color: #ff334b;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  padding: 2px 5px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  box-shadow: 0 2px 6px rgba(255, 51, 75, 0.5);
+}
+
+.webcam-live-badge .pulse-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: #ffffff;
+  animation: pulse-dot 1.2s infinite ease-in-out;
+}
+
+@keyframes pulse-dot {
+  0% { transform: scale(0.8); opacity: 0.5; }
+  50% { transform: scale(1.4); opacity: 1; }
+  100% { transform: scale(0.8); opacity: 0.5; }
+}
+
+/* Quick hover info overlay */
+.webcam-tooltip {
+  position: absolute;
+  left: 130px;
+  bottom: 30px;
+  background-color: #1e1e1e;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 6px;
+  padding: 8px 12px;
+  box-shadow: var(--shadow-popup);
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateX(-8px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  z-index: 200;
+}
+
+.floating-webcam-widget:hover .webcam-tooltip {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.webcam-tooltip-name {
+  font-size: 19px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.webcam-tooltip-role {
+  font-size: 18px;
+  color: var(--vscode-sidebar-fg);
+}
+
+/* Webcam micro controls */
+.webcam-controls {
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 4px;
+  background-color: rgba(30, 30, 30, 0.9);
+  padding: 2px 6px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.floating-webcam-widget:hover .webcam-controls {
+  opacity: 1;
+}
+
+.webcam-ctrl-btn {
+  font-size: 14px;
+  color: #ccc;
+  cursor: pointer;
+  padding: 1px 3px;
+}
+
+.webcam-ctrl-btn:hover {
+  color: #fff;
+}
+
+/* ==========================================================================
+   TERMINAL VIEW & INTERACTIVE SHELL
+   ========================================================================== */
+.terminal-container {
+  flex: 1;
+  background-color: var(--vscode-terminal-bg);
+  padding: 12px 18px;
+  overflow-y: auto;
+  font-family: var(--font-code);
+  font-size: clamp(13.5px, 1.15vw, 15px);
+  line-height: 1.5;
+  color: var(--vscode-terminal-fg);
+  max-width: 100%;
+  min-width: 0;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.terminal-history {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.terminal-line {
+  word-break: break-word;
+  overflow-wrap: break-word;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.terminal-prompt-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+  flex-wrap: wrap;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.terminal-prompt-path {
+  color: var(--vscode-terminal-prompt);
+  font-weight: 600;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.terminal-prompt-branch {
+  color: var(--vscode-terminal-branch);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.terminal-prompt-symbol {
+  color: var(--vscode-terminal-fg);
+  flex-shrink: 0;
+}
+
+.terminal-input-field {
+  flex: 1;
+  font-family: var(--font-code);
+  font-size: clamp(13.5px, 1.15vw, 15px);
+  color: #ffffff;
+  background: transparent;
+  border: none;
+  outline: none;
+  padding: 0;
+  min-width: 0;
+}
+
+.terminal-cmd-highlight {
+  color: #ffffff;
+  font-weight: 500;
+}
+
+.terminal-output {
+  margin-top: 2px;
+  white-space: pre-wrap;
+  color: var(--vscode-terminal-fg);
+}
+
+.terminal-output.success {
+  color: var(--vscode-terminal-success);
+}
+
+.terminal-output.error {
+  color: var(--vscode-terminal-error);
+}
+
+.terminal-output.warning {
+  color: var(--vscode-terminal-warning);
+}
+
+.terminal-table {
+  display: table;
+  border-spacing: 12px 2px;
+  margin: 4px 0;
+}
+
+.terminal-table-row {
+  display: table-row;
+}
+
+.terminal-table-cell {
+  display: table-cell;
+}
+
+.terminal-dir-link {
+  color: var(--vscode-terminal-prompt);
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.terminal-ext-link {
+  color: var(--syn-link);
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+/* ==========================================================================
+   COMMAND PALETTE MODAL (Ctrl/Cmd + P / K)
+   ========================================================================== */
+.command-palette-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(3px);
+  z-index: 1000;
+  display: none;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: min(50px, 8vh);
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.command-palette-backdrop.active {
+  display: flex;
+}
+
+.command-palette-modal {
+  width: 580px;
+  max-width: 100%;
+  max-height: 85vh;
+  background-color: var(--vscode-sidebar-bg);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 8px;
+  box-shadow: var(--shadow-modal);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  animation: palette-slide-in 0.15s ease-out;
+}
+
+@keyframes palette-slide-in {
+  from { opacity: 0; transform: translateY(-12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.palette-input-wrapper {
+  display: flex;
+  align-items: center;
+  padding: 10px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  gap: 10px;
+}
+
+.palette-search-icon {
+  color: var(--vscode-titlebar-fg);
+  font-size: 17px;
+  flex-shrink: 0;
+}
+
+.palette-input {
+  flex: 1;
+  font-size: clamp(14.5px, 1.25vw, 17px);
+  font-family: var(--font-ui);
+  color: #ffffff;
+  min-width: 0;
+}
+
+.palette-input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.palette-results-list {
+  max-height: 340px;
+  overflow-y: auto;
+  list-style: none;
+  padding: 6px 0;
+}
+
+.palette-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-size: clamp(13.5px, 1.15vw, 15px);
+  color: var(--vscode-sidebar-fg);
+  max-width: 100%;
+  min-width: 0;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.palette-item.selected, .palette-item:hover {
+  background-color: var(--vscode-statusbar-bg);
+  color: #ffffff;
+}
+
+.palette-item-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  flex: 1;
+}
+
+.palette-item-icon {
+  width: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.palette-item-tag {
+  font-size: 11px;
+  opacity: 0.65;
+  flex-shrink: 0;
+}
+
+/* ==========================================================================
+   PROBLEMS, OUTPUT, DEBUG CONSOLE, PORTS PANELS
+   ========================================================================== */
+.problems-view, .output-view, .debug-view, .ports-view {
+  padding: 14px 18px;
+  overflow-y: auto;
+  color: var(--vscode-sidebar-fg);
+}
+
+.problems-empty {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--vscode-terminal-success);
+}
+
+.output-log-line {
+  line-height: 1.6;
+}
+
+.port-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.port-badge {
+  background-color: rgba(39, 201, 63, 0.15);
+  color: #27c93f;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+/* ==========================================================================
+   NOTIFICATION TOAST
+   ========================================================================== */
+.vscode-toast {
+  position: fixed;
+  bottom: calc(28px + env(safe-area-inset-bottom, 0px));
+  right: 16px;
+  max-width: min(400px, calc(100vw - 32px));
+  background-color: var(--vscode-sidebar-bg);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 6px;
+  box-shadow: var(--shadow-popup);
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  z-index: 9999;
+  font-size: 14.5px;
+  transform: translateY(100px);
+  opacity: 0;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  word-break: break-word;
+}
+
+.vscode-toast.show {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.toast-icon {
+  color: var(--vscode-statusbar-bg);
+  font-size: 17px;
+}
+
+.toast-close {
+  cursor: pointer;
+  opacity: 0.6;
+}
+
+.toast-close:hover {
+  opacity: 1;
+}
